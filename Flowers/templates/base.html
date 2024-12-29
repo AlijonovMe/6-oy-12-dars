@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Flowers - shop</title>
+    <link href="{% static 'images/icon.png' %}" rel="icon">
+    {% include 'parts/_styles.html' %}
+</head>
+<body>
+
+<div>
+    {% include 'parts/_navbar.html' %}
+
+    <main class="mt-5 mb-5 container">
+        {% if messages %}
+        <div class="position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 1050; width: 50%;">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show text-center" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block main %}
+        {% endblock main %}
+    </main>
+
+    {% include 'parts/_footer.html' %}
+</div>
+
+{% include 'parts/_js.html' %}
+
+</body>
+</html>

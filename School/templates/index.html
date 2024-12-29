@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+{% if request.user.is_authenticated %}
+<!-- Course Section -->
+<div class="container my-5">
+    {% if courses %}
+    <h2 class="text-center mb-4">Kurslar</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for course in courses %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-light position-relative">
+                {% if request.user.is_superuser %}
+                <div class="position-absolute top-0 end-0 p-2">
+                    <a href="{% url 'updateCourse' course.id %}" class="text-dark me-2">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    <a href="{% url 'deleteCourse' course.id %}" class="text-dark">
+                        <i class="far fa-trash-can"></i>
+                    </a>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ course.name }}</h5>
+                    <p class="card-text">{{ course.created_at }}</p>
+                </div>
+                <div class="card-footer text-muted text-center">
+                    <a href="{% url 'courses_detail' course.id %}" class="btn btn-primary w-100">Kurslarga o'tish</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h2 class="text-center mb-4">Hozirda kurslar mavjud emas.</h2>
+    {% endif %}
+</div>
+<!-- End course section  -->
+
+<!-- Lesson Section -->
+<div class="container my-5">
+    {% if lessons %}
+    <h2 class="text-center mb-4">Darslar</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for lesson in lessons %}
+        <div class="col">
+            <div class="card shadow-sm border-light">
+                <div class="card-body">
+                    <h5 class="card-title">{{ lesson.name }}</h5>
+                    <p class="card-text">{{ lesson.course.name }}</p>
+                    <a href="{% url 'lessons_detail' lesson.id %}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-info-circle"></i> Batafsil
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h2 class="text-center mb-4">Hozirda darslar mavjud emas.</h2>
+    {% endif %}
+</div>
+<!-- End lesson section -->
+
+{% else %}
+
+<div class="d-flex justify-content-center align-items-center" style="height: 500px;">
+    <h1>Tizimdan foydalanish uchun ro'yxatdan o'tishingiz kerak :)</h1>
+</div>
+
+{% endif %}
+
+{% endblock main %}

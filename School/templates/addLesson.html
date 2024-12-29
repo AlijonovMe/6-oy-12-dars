@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h2 class="text-center mb-4">Ma'lumot qo'shish</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% for field in forms %}
+    <div class="form-group">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {{ field }}
+
+    {% if field.errors %}
+    {% for error in field.errors %}
+    <p style="color: #e74c3c; font-size: 0.875rem;">{{ error }}</p>
+    {% endfor %}
+    <style>
+
+        #{{ field.id_for_label }} {
+            border-color: #e74c3c;
+        }
+    </style>
+    {% endif %}
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary mt-3">Saqlash</button>
+</form>
+
+{% endblock main %}

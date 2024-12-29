@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container my-5">
+    <!-- Lesson Details -->
+    <h2 class="text-center mb-4">Kurs turi: {{ lesson.course.name }}</h2>
+
+    <div class="card shadow-sm border-light mb-5">
+        <div class="card-body">
+            <h5 class="card-title">Dars haqida batafsil ma'lumot!</h5>
+            {% if request.user.is_superuser %}
+            <div class="position-absolute top-0 end-0 p-2">
+                <a href="{% url 'updateLesson' lesson.id %}" class="text-dark me-2">
+                    <i class="fas fa-pen"></i>
+                </a>
+                <a href="{% url 'deleteLesson' lesson.id %}" class="text-dark">
+                    <i class="far fa-trash-can"></i>
+                </a>
+            </div>
+            {% endif %}
+            <p class="card-text"><strong>Nomi:</strong> {{ lesson.name }}</p>
+            <p class="card-text"><strong>Uyga vazifa:</strong> {{ lesson.homework|linebreaks }}</p>
+            <p class="card-text"><strong>Uyga vazifa muddati:</strong> {{ lesson.deadline }}</p>
+            <p class="card-text"><strong>Uyga vazifa berilgan sanasi:</strong> {{ lesson.update_at }}</p>
+        </div>
+    </div>
+
+    <a href="{% url 'home' %}" class="btn btn-secondary mb-5">Orqaga qaytish</a>
+
+    <!-- Comment Section -->
+    <div class="card shadow-sm border-light mb-5">
+        <div class="card-body">
+            <h5 class="card-title mb-2">Izoh qoldirish</h5>
+            <form method="POST" action="{% if update %}{% url 'updateComment' comment.id %} {% else %} {% url 'comment_save' lesson.id %} {% endif %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="{{ form.text.id_for_label }}" class="form-label">{{ form.text.label }}</label>
+                    {{ form.text }}
+                </div>
+                <button type="submit" class="btn btn-primary">{% if update %} Izohni yangilash {% else %} Izoh qo'shish {% endif %}</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Comments List -->
+    <h5 class="mb-4">Izohlar:</h5>
+    {% if comments %}
+    <div class="list-group">
+        {% for comment in comments %}
+        <div class="list-group-item list-group-item-action mb-2 shadow-sm position-relative">
+            <div class="d-flex w-100 justify-content-between">
+                <div>
+                    <h6 class="mb-1">{{ comment.author }}</h6>
+                    <small class="text-muted">{{ comment.created }}</small>
+                </div>
+
+                {% if request.user == comment.author or request.user.is_superuser %}
+                <div class="comment-icons position-absolute top-0 end-0 p-2">
+                    <a href="{% url 'updateComment' comment.id %}" class="text-dark me-2">
+                        <i class="fas fa-pen" style="font-size: 0.9rem; transition: color 0.3s;"></i>
+                    </a>
+                    <a href="{% url 'deleteComment' comment.id %}" class="text-dark">
+                        <i class="far fa-trash-can" style="font-size: 0.9rem; transition: color 0.3s;"></i>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            <p class="mb-1">{{ comment.text }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-muted">Hozircha izohlar mavjud emas.</p>
+    {% endif %}
+</div>
+
+{% endblock main %}

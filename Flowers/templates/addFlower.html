@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h2 class="text-center mb-4">Ma'lumot qo'shish</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% for field in forms %}
+    {% if field.name == 'published' %}
+    <div class="form-check">
+        {{ field }}
+        <label class="form-check-label ms-2" for="{{ field.id_for_label }}">
+            {{ field.label }}
+        </label>
+    </div>
+    {% else %}
+    <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {{ field }}
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary mt-3">Saqlash</button>
+</form>
+
+{% endblock main %}

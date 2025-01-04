@@ -135,11 +135,11 @@ class CommentForm(forms.Form):
         label="Izoh matni",
     )
 
-    def save(self, comment, user, flower):
+    def save(self, comment, user, lesson):
         comment.objects.create(
             text=self.cleaned_data.get('text'),
             author=user,
-            flower=flower
+            lesson=lesson
         )
 
     def update(self, value):
